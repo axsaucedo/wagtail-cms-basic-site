@@ -1,0 +1,72 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Manrope",
+      "count": 73
+    }
+  ],
+  "colors": {
+    "primary": "#23206F",
+    "accent": "#060341",
+    "background": "#FFFFFF",
+    "textPrimary": "#060341",
+    "link": "#060341"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Manrope",
+      "heading": "Manrope"
+    },
+    "fontStacks": {
+      "body": [
+        "Manrope"
+      ],
+      "heading": [
+        "Manrope"
+      ],
+      "paragraph": [
+        "Manrope"
+      ]
+    },
+    "fontSizes": {
+      "h1": "48px",
+      "h2": "42px",
+      "body": "18px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "6px"
+  },
+  "components": {},
+  "images": {
+    "logo": "https://flymex.aero/assets/images/plane-img-color.svg",
+    "favicon": "https://flymex.aero/favicon.ico",
+    "ogImage": "/touchicons/180.png"
+  },
+  "__framework_hints": [],
+  "__llm_logo_reasoning": {
+    "selectedIndex": 0,
+    "reasoning": "Heuristic fallback: Good indicators: in header, header location, top-left position, highest logo on page, alt matches logo/brand, src contains brand name \"Flymex\", too small (likely icon, penalty), small square icon (likely UI icon, heavy penalty), not visible (penalty). Score: 51 (ahead by 30 points)",
+    "confidence": 0.65
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": -1,
+      "text": "N/A",
+      "reasoning": "LLM failed"
+    },
+    "secondary": {
+      "index": -1,
+      "text": "N/A",
+      "reasoning": "LLM failed"
+    },
+    "confidence": 0
+  },
+  "confidence": {
+    "buttons": 0,
+    "colors": 0,
+    "overall": 0
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "sans-serif",
+      "count": 119
+    },
+    {
+      "family": "museo-sans",
+      "count": 114
+    },
+    {
+      "family": "-apple-system",
+      "count": 5
+    },
+    {
+      "family": "BlinkMacSystemFont",
+      "count": 5
+    },
+    {
+      "family": "Segoe UI",
+      "count": 5
+    },
+    {
+      "family": "Roboto",
+      "count": 5
+    },
+    {
+      "family": "Helvetica Neue",
+      "count": 5
+    },
+    {
+      "family": "Arial",
+      "count": 5
+    },
+    {
+      "family": "Noto Sans",
+      "count": 5
+    },
+    {
+      "family": "Apple Color Emoji",
+      "count": 5
+    }
+  ],
+  "colors": {
+    "primary": "#C35C69",
+    "accent": "#B00016",
+    "background": "#FFFFFF",
+    "textPrimary": "#B00016",
+    "link": "#B00016"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "museo-sans",
+      "heading": "albra-regular"
+    },
+    "fontStacks": {
+      "body": [
+        "museo-sans",
+        "sans-serif"
+      ],
+      "heading": [
+        "albra-regular"
+      ],
+      "paragraph": [
+        "museo-sans",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "64px",
+      "h2": "19.6px",
+      "body": "14px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "5px"
+  },
+  "components": {},
+  "images": {
+    "logo": null,
+    "favicon": "https://www.vistajet.com/apple-icon-57x57.png",
+    "ogImage": "https://www.vistajet.com/globalassets/images/social-share/private-jet-vistajet-default-social.jpg?width=1080&quality=80&upscale=false"
+  },
+  "__framework_hints": [],
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": -1,
+      "text": "N/A",
+      "reasoning": "LLM failed"
+    },
+    "secondary": {
+      "index": -1,
+      "text": "N/A",
+      "reasoning": "LLM failed"
+    },
+    "confidence": 0
+  },
+  "confidence": {
+    "buttons": 0,
+    "colors": 0,
+    "overall": 0
+  }
+}
