@@ -1,0 +1,19 @@
+{% load wagtailimages_tags %}
+
+<div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group-hover:-translate-y-1">
+    {% image self.image fill-600x400 as card_img %}
+    <div class="relative h-56 overflow-hidden">
+        <img src="{{ card_img.url }}" alt="{{ self.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <h3 class="absolute bottom-4 left-6 text-white text-xl font-bold">{{ self.title }}</h3>
+    </div>
+    <div class="p-6">
+        <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ self.description }}</p>
+        <a href="{{ self.link_url|default:'#' }}" class="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all text-sm">
+            {{ self.link_text }}
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+        </a>
+    </div>
+</div>

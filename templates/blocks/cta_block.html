@@ -1,0 +1,20 @@
+{% load wagtailimages_tags %}
+
+<section class="relative py-24 lg:py-32 overflow-hidden">
+    {% if self.background_image %}
+    {% image self.background_image fill-1920x600 as cta_bg %}
+    <div class="absolute inset-0">
+        <img src="{{ cta_bg.url }}" alt="" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70"></div>
+    </div>
+    {% else %}
+    <div class="absolute inset-0 bg-gradient-to-r from-primary to-primary/80"></div>
+    {% endif %}
+    
+    <div class="relative z-10 container mx-auto px-4 lg:px-8 text-center">
+        <h2 class="text-3xl lg:text-5xl font-bold text-white mb-8 animate-on-scroll">{{ self.title }}</h2>
+        <button onclick="openFlightModal()" class="bg-white text-primary px-10 py-4 font-semibold rounded-lg shadow-2xl hover:shadow-white/30 hover:-translate-y-1 transition-all duration-300 animate-on-scroll">
+            {{ self.button_text }}
+        </button>
+    </div>
+</section>

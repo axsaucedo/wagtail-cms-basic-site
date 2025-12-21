@@ -1,0 +1,26 @@
+{% load wagtailimages_tags %}
+
+<section class="py-20 lg:py-32 bg-gray-50">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div class="animate-on-scroll">
+                <p class="text-primary text-sm font-semibold tracking-wider mb-4">{{ self.section_subtitle }}</p>
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">{{ self.title }}</h2>
+                <p class="text-gray-600 text-lg mb-8">{{ self.description }}</p>
+                {% if self.link_text and self.link_url %}
+                <a href="{{ self.link_url }}" class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-4 transition-all">
+                    {{ self.link_text }}
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+                {% endif %}
+            </div>
+            
+            <div class="animate-on-scroll">
+                {% image self.image fill-700x500 as exp_img %}
+                <img src="{{ exp_img.url }}" alt="{{ self.title }}" class="w-full h-auto rounded-xl shadow-2xl">
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,5 @@
+Django>=5.1,<6.0
+wagtail>=6.4,<7.0
+whitenoise>=6.8,<7.0
+gunicorn>=23.0,<24.0
+Pillow>=11.0,<12.0

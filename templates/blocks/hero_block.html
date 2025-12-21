@@ -1,0 +1,66 @@
+{% load wagtailimages_tags %}
+
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    {% image self.background_image fill-1920x1080 as hero_bg %}
+    <div class="absolute inset-0">
+        <img src="{{ hero_bg.url }}" alt="" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60"></div>
+    </div>
+    
+    <div class="relative z-10 container mx-auto px-4 lg:px-8 text-center text-white py-32">
+        <h1 class="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 animate-fade-up" style="font-family: 'Manrope', sans-serif; font-style: italic;">
+            {{ self.headline }}
+        </h1>
+        {% if self.subheadline %}
+        <p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-10 animate-fade-up" style="animation-delay: 0.1s;">
+            {{ self.subheadline }}
+        </p>
+        {% endif %}
+        
+        <button onclick="openFlightModal()" class="btn-primary px-10 py-4 text-lg font-semibold rounded-lg shadow-2xl hover:shadow-primary/30 transition-all duration-300 animate-fade-up" style="animation-delay: 0.2s;">
+            {{ self.cta_text }}
+        </button>
+    </div>
+    
+    {% if self.show_flight_picker %}
+    <div class="absolute bottom-0 left-0 right-0 z-20">
+        <div class="container mx-auto px-4 lg:px-8 pb-8">
+            <div class="bg-white/95 backdrop-blur-md rounded-xl shadow-2xl p-6 lg:p-8 max-w-5xl mx-auto animate-fade-up" style="animation-delay: 0.3s;">
+                <h3 class="text-gray-500 text-sm font-semibold tracking-wider mb-4">PLAN A FLIGHT</h3>
+                <form class="flex flex-col lg:flex-row gap-4" id="quick-flight-form">
+                    <div class="flex-1 relative">
+                        <div class="flex items-center gap-3 border-b border-gray-200 pb-3">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            </svg>
+                            <input type="text" placeholder="From" class="w-full bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-sm" id="quick-origin">
+                        </div>
+                    </div>
+                    <div class="flex-1 relative">
+                        <div class="flex items-center gap-3 border-b border-gray-200 pb-3">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            </svg>
+                            <input type="text" placeholder="To" class="w-full bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-sm" id="quick-destination">
+                        </div>
+                    </div>
+                    <div class="flex-1 relative">
+                        <div class="flex items-center gap-3 border-b border-gray-200 pb-3">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <input type="date" class="w-full bg-transparent text-gray-900 focus:outline-none text-sm" id="quick-date">
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <button type="button" onclick="openFlightModal()" class="w-full lg:w-auto btn-primary px-8 py-3 font-semibold rounded-lg transition-all">
+                            Request Quote
+                        </button>
+                    </div>
+                </form>
+                <p class="text-gray-400 text-xs mt-4">Need more flights? Switch to <a href="#" onclick="openFlightModal(); return false;" class="text-primary underline">multi-city</a></p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</section>

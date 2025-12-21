@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <!-- Plane icon -->
+  <g transform="translate(0, 15)">
+    <path d="M45 15L15 25L10 20L5 22L12 28L8 35L12 34L18 30L45 22L50 15L45 15Z" fill="#23206F"/>
+    <path d="M45 15L50 15L45 22L45 15Z" fill="#B00016"/>
+    <path d="M12 28L8 35L12 34L12 28Z" fill="#B00016"/>
+  </g>
+  <!-- FlyMex text -->
+  <text x="60" y="40" font-family="Manrope, sans-serif" font-size="28" font-weight="700" fill="white">
+    <tspan fill="white">Fly</tspan><tspan fill="white">Mex</tspan>
+  </text>
+</svg>
