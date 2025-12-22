@@ -90,7 +90,7 @@ This validates:
 
 A health check endpoint is also available at `/health/` that returns JSON status.
 
-**The smoke test runs automatically during deployment build phase.** If it fails, the deployment will be blocked, preventing broken sites from going live.
+**Run the smoke test locally before publishing** to ensure your site is properly configured. The build phase only collects static files since database access isn't available during build.
 
 ## Editing Content
 1. Go to `/admin/` and login (admin / admin123)
