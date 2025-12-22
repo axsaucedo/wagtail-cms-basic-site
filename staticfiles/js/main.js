@@ -299,12 +299,34 @@ function updatePassengers(delta) {
 window.updatePassengers = updatePassengers;
 
 /**
+ * Get CSRF token from cookie
+ */
+function getCsrfToken() {
+    const name = 'csrftoken';
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+/**
  * Flight quote form submission
  */
 function initFlightForm() {
     const form = document.getElementById('flight-quote-form');
     
     if (!form) return;
+    
+    // Ensure CSRF cookie is set
+    fetch('/api/csrf-token/', { credentials: 'same-origin' });
     
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -322,11 +344,15 @@ function initFlightForm() {
         submitBtn.textContent = 'Sending...';
         submitBtn.disabled = true;
         
+        const csrfToken = getCsrfToken();
+        
         fetch('/api/flight-quote/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
             },
+            credentials: 'same-origin',
             body: JSON.stringify(data)
         })
         .then(function(response) { return response.json(); })

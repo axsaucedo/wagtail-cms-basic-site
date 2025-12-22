@@ -15,7 +15,10 @@ class Command(BaseCommand):
         self.stdout.write('Setting up FlyMex site...')
         
         # Get the root page
-        root = Page.objects.get(slug='root')
+        root = Page.objects.filter(depth=1).first()
+        if not root:
+            self.stdout.write(self.style.ERROR('No root page found. Run: python manage.py migrate'))
+            return
         
         # Create or get HomePage
         home_page = HomePage.objects.first()
@@ -28,26 +31,38 @@ class Command(BaseCommand):
                 # Delete the existing default page
                 existing_home.delete()
             
-            # Create new HomePage as child of root
+            # Create new HomePage as child of root using treebeard directly
             home_page = HomePage(
                 title='FlyMex Aero',
                 slug='home',
                 seo_title='FlyMex - Flying Private Made Simple | Luxury Jet Charter',
                 body=[],
+                depth=2,
+                path='00010001',
             )
-            root.add_child(instance=home_page)
+            home_page.save()
             home_page.save_revision().publish()
             self.stdout.write(self.style.SUCCESS('Created HomePage'))
         else:
             self.stdout.write('HomePage already exists')
         
-        # Update Site to point to our homepage
+        # Update or create Site to point to our homepage
         site = Site.objects.first()
         if site:
             site.root_page = home_page
             site.site_name = 'FlyMex Aero'
+            site.is_default_site = True
             site.save()
             self.stdout.write(self.style.SUCCESS('Updated Site configuration'))
+        else:
+            Site.objects.create(
+                hostname='*',
+                port=80,
+                site_name='FlyMex Aero',
+                root_page=home_page,
+                is_default_site=True,
+            )
+            self.stdout.write(self.style.SUCCESS('Created Site configuration'))
         
         # Create Fleet Page as child of HomePage
         fleet_page = FleetPage.objects.first()
@@ -56,8 +71,10 @@ class Command(BaseCommand):
                 title='Our Fleet',
                 slug='fleet',
                 intro='<p>Discover our world-class fleet of private jets, from light jets for short trips to heavy jets for transcontinental travel.</p>',
+                depth=3,
+                path='000100010001',
             )
-            home_page.add_child(instance=fleet_page)
+            fleet_page.save()
             fleet_page.save_revision().publish()
             self.stdout.write(self.style.SUCCESS('Created Fleet Page'))
         else:
@@ -71,8 +88,10 @@ class Command(BaseCommand):
                 slug='experience',
                 intro='<p>Experience the pinnacle of private aviation with FlyMex. Every journey is crafted with precision and care.</p>',
                 body=[],
+                depth=3,
+                path='000100010002',
             )
-            home_page.add_child(instance=experience_page)
+            experience_page.save()
             experience_page.save_revision().publish()
             self.stdout.write(self.style.SUCCESS('Created Experience Page'))
         else:
@@ -89,8 +108,10 @@ class Command(BaseCommand):
                 email='info@flymex.aero',
                 address='Toluca International Airport\nHangar Zone\nToluca, Mexico',
                 body=[],
+                depth=3,
+                path='000100010003',
             )
-            home_page.add_child(instance=contact_page)
+            contact_page.save()
             contact_page.save_revision().publish()
             self.stdout.write(self.style.SUCCESS('Created Contact Page'))
         else:

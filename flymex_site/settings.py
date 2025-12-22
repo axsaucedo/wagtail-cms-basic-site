@@ -4,6 +4,7 @@ Django settings for flymex_site project.
 
 import os
 from pathlib import Path
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -17,6 +18,8 @@ INSTALLED_APPS = [
     'home',
     'fleet',
     'booking',
+    
+    'django.contrib.postgres',
     
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -72,12 +75,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'flymex_site.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -111,4 +120,4 @@ WAGTAILSEARCH_BACKENDS = {
     }
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://*.replit.dev', 'https://*.repl.co']
+CSRF_TRUSTED_ORIGINS = ['https://*.replit.dev', 'https://*.repl.co', 'https://*.replit.app']
