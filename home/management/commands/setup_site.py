@@ -262,6 +262,19 @@ class Command(BaseCommand):
             MenuItem.objects.create(**data)
             self.stdout.write(f'Created menu item: {data["title"]}')
         
+        # Fix numchild values for proper Wagtail routing
+        from wagtail.models import Page
+        root = Page.objects.filter(depth=1).first()
+        if root:
+            root.numchild = Page.objects.filter(depth=2).count()
+            root.save()
+        
+        home = HomePage.objects.first()
+        if home:
+            home.numchild = Page.objects.filter(depth=3, path__startswith=home.path).count()
+            home.save()
+        
+        self.stdout.write(self.style.SUCCESS('Fixed page tree structure'))
         self.stdout.write(self.style.SUCCESS('Site setup complete!'))
         self.stdout.write('')
         self.stdout.write('Pages created:')

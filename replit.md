@@ -78,6 +78,18 @@ View and manage customer flight quote requests at `/admin/` under the Booking se
 ## Running the Project
 The workflow runs: `python manage.py runserver 0.0.0.0:5000`
 
+## Smoke Testing Before Deployment
+Run the smoke test to validate the site is properly configured:
+```bash
+python manage.py smoke_test
+```
+This validates:
+- Database has required data (pages, aircraft, airports)
+- All pages return 200 status
+- Page tree structure is correct for routing
+
+A health check endpoint is also available at `/health/` that returns JSON status.
+
 ## Editing Content
 1. Go to `/admin/` and login (admin / admin123)
 2. Click **Pages** in the sidebar
