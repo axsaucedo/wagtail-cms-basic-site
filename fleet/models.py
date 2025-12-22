@@ -132,6 +132,8 @@ class FleetPage(Page):
         FieldPanel('intro'),
     ]
     
+    parent_page_types = ['home.HomePage']
+    
     def get_context(self, request):
         context = super().get_context(request)
         context['categories'] = AircraftCategory.objects.all()

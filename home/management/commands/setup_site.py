@@ -3,8 +3,8 @@ Management command to set up initial Wagtail site with sample content.
 """
 from django.core.management.base import BaseCommand
 from wagtail.models import Page, Site
-from home.models import HomePage, SiteSettings, MenuItem
-from fleet.models import Aircraft, AircraftCategory
+from home.models import HomePage, ExperiencePage, ContactPage, SiteSettings, MenuItem
+from fleet.models import Aircraft, AircraftCategory, FleetPage
 from booking.models import Airport
 
 
@@ -17,39 +17,29 @@ class Command(BaseCommand):
         # Get the root page
         root = Page.objects.get(slug='root')
         
-        # Create HomePage if not exists
-        try:
-            home_page = HomePage.objects.get()
-            self.stdout.write('HomePage already exists')
-        except HomePage.DoesNotExist:
-            # Check if there's a default welcome page to replace
+        # Create or get HomePage
+        home_page = HomePage.objects.first()
+        
+        if not home_page:
+            # Check if there's a default welcome page at depth 2
             existing_home = Page.objects.filter(depth=2).first()
             
-            if existing_home and not isinstance(existing_home.specific, HomePage):
-                # Replace the existing page
-                home_page = HomePage(
-                    title='FlyMex Aero',
-                    slug='home',
-                    seo_title='FlyMex - Flying Private Made Simple | Luxury Jet Charter',
-                    body=[],
-                    path=existing_home.path,
-                    depth=existing_home.depth,
-                )
+            if existing_home:
+                # Delete the existing default page
                 existing_home.delete()
-                home_page.save()
-                home_page.save_revision().publish()
-                self.stdout.write(self.style.SUCCESS('Replaced default page with HomePage'))
-            else:
-                # Add new child
-                home_page = HomePage(
-                    title='FlyMex Aero',
-                    slug='home',
-                    seo_title='FlyMex - Flying Private Made Simple | Luxury Jet Charter',
-                    body=[],
-                )
-                root.add_child(instance=home_page)
-                home_page.save_revision().publish()
-                self.stdout.write(self.style.SUCCESS('Created HomePage'))
+            
+            # Create new HomePage as child of root
+            home_page = HomePage(
+                title='FlyMex Aero',
+                slug='home',
+                seo_title='FlyMex - Flying Private Made Simple | Luxury Jet Charter',
+                body=[],
+            )
+            root.add_child(instance=home_page)
+            home_page.save_revision().publish()
+            self.stdout.write(self.style.SUCCESS('Created HomePage'))
+        else:
+            self.stdout.write('HomePage already exists')
         
         # Update Site to point to our homepage
         site = Site.objects.first()
@@ -58,6 +48,53 @@ class Command(BaseCommand):
             site.site_name = 'FlyMex Aero'
             site.save()
             self.stdout.write(self.style.SUCCESS('Updated Site configuration'))
+        
+        # Create Fleet Page as child of HomePage
+        fleet_page = FleetPage.objects.first()
+        if not fleet_page:
+            fleet_page = FleetPage(
+                title='Our Fleet',
+                slug='fleet',
+                intro='<p>Discover our world-class fleet of private jets, from light jets for short trips to heavy jets for transcontinental travel.</p>',
+            )
+            home_page.add_child(instance=fleet_page)
+            fleet_page.save_revision().publish()
+            self.stdout.write(self.style.SUCCESS('Created Fleet Page'))
+        else:
+            self.stdout.write('Fleet Page already exists')
+        
+        # Create Experience Page as child of HomePage
+        experience_page = ExperiencePage.objects.first()
+        if not experience_page:
+            experience_page = ExperiencePage(
+                title='The Experience',
+                slug='experience',
+                intro='<p>Experience the pinnacle of private aviation with FlyMex. Every journey is crafted with precision and care.</p>',
+                body=[],
+            )
+            home_page.add_child(instance=experience_page)
+            experience_page.save_revision().publish()
+            self.stdout.write(self.style.SUCCESS('Created Experience Page'))
+        else:
+            self.stdout.write('Experience Page already exists')
+        
+        # Create Contact Page as child of HomePage
+        contact_page = ContactPage.objects.first()
+        if not contact_page:
+            contact_page = ContactPage(
+                title='Contact',
+                slug='contact',
+                intro='<p>Get in touch with our team to plan your next private flight.</p>',
+                phone='+52 55 4601 1670',
+                email='info@flymex.aero',
+                address='Toluca International Airport\nHangar Zone\nToluca, Mexico',
+                body=[],
+            )
+            home_page.add_child(instance=contact_page)
+            contact_page.save_revision().publish()
+            self.stdout.write(self.style.SUCCESS('Created Contact Page'))
+        else:
+            self.stdout.write('Contact Page already exists')
         
         # Create site settings
         if not SiteSettings.objects.exists():
@@ -71,16 +108,16 @@ class Command(BaseCommand):
         
         # Create aircraft categories
         categories_data = [
-            ('Light Jets', 'Perfect for short trips with up to 7 passengers.'),
-            ('Midsize Jets', 'Ideal balance of comfort and range for 8-9 passengers.'),
-            ('Super Midsize Jets', 'Enhanced cabin space and transcontinental range.'),
-            ('Heavy Jets', 'Maximum luxury and range for 10-16 passengers.'),
+            ('Light Jets', 'Perfect for short trips with up to 7 passengers.', 1),
+            ('Midsize Jets', 'Ideal balance of comfort and range for 8-9 passengers.', 2),
+            ('Super Midsize Jets', 'Enhanced cabin space and transcontinental range.', 3),
+            ('Heavy Jets', 'Maximum luxury and range for 10-16 passengers.', 4),
         ]
         
-        for name, desc in categories_data:
+        for name, desc, order in categories_data:
             cat, created = AircraftCategory.objects.get_or_create(
                 name=name,
-                defaults={'description': desc}
+                defaults={'description': desc, 'order': order}
             )
             if created:
                 self.stdout.write(f'Created category: {name}')
@@ -191,27 +228,28 @@ class Command(BaseCommand):
             if created:
                 self.stdout.write(f'Created airport: {data["code"]} - {data["city"]}')
         
-        # Create menu items
-        menu_items_data = [
-            {'title': 'Fleet', 'url': '/fleet/', 'order': 1},
-            {'title': 'Experience', 'url': '/experience/', 'order': 2},
-            {'title': 'Safety', 'url': '/safety/', 'order': 3},
-            {'title': 'Contact', 'url': '/contact/', 'order': 4},
+        # Clear old menu items and create new ones linked to pages
+        MenuItem.objects.all().delete()
+        
+        menu_items = [
+            {'title': 'Fleet', 'page': fleet_page, 'order': 1},
+            {'title': 'Experience', 'page': experience_page, 'order': 2},
+            {'title': 'Contact', 'page': contact_page, 'order': 3},
         ]
         
-        for data in menu_items_data:
-            item, created = MenuItem.objects.get_or_create(
-                title=data['title'],
-                defaults=data
-            )
-            if created:
-                self.stdout.write(f'Created menu item: {data["title"]}')
+        for data in menu_items:
+            MenuItem.objects.create(**data)
+            self.stdout.write(f'Created menu item: {data["title"]}')
         
         self.stdout.write(self.style.SUCCESS('Site setup complete!'))
         self.stdout.write('')
-        self.stdout.write('To add content to the homepage:')
+        self.stdout.write('Pages created:')
+        self.stdout.write(f'  - Home: /')
+        self.stdout.write(f'  - Fleet: /fleet/')
+        self.stdout.write(f'  - Experience: /experience/')
+        self.stdout.write(f'  - Contact: /contact/')
+        self.stdout.write('')
+        self.stdout.write('To customize content:')
         self.stdout.write('1. Go to /admin/')
         self.stdout.write('2. Login with your superuser credentials')
-        self.stdout.write('3. Click on Pages > Home')
-        self.stdout.write('4. Add StreamField blocks (Hero, Fleet Highlight, etc.)')
-        self.stdout.write('5. Upload images in Images section')
+        self.stdout.write('3. Click on Pages to edit any page')

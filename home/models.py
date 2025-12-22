@@ -183,8 +183,86 @@ class HomePage(Page):
         FieldPanel('body'),
     ]
     
+    # Allow these page types as children
+    subpage_types = ['home.ExperiencePage', 'home.ContactPage', 'home.GenericPage', 'fleet.FleetPage']
+    
     class Meta:
         verbose_name = "Home Page"
+
+
+class ExperiencePage(Page):
+    """Experience/About page with StreamField content"""
+    
+    intro = RichTextField(blank=True)
+    
+    body = StreamField([
+        ('image_text', ImageTextBlock()),
+        ('services', ServicesBlock()),
+        ('experience', ExperienceBlock()),
+        ('safety_certifications', SafetyCertificationsBlock()),
+        ('cta', CTABlock()),
+    ], use_json_field=True, blank=True)
+    
+    content_panels = Page.content_panels + [
+        FieldPanel('intro'),
+        FieldPanel('body'),
+    ]
+    
+    parent_page_types = ['home.HomePage']
+    
+    class Meta:
+        verbose_name = "Experience Page"
+
+
+class ContactPage(Page):
+    """Contact page"""
+    
+    intro = RichTextField(blank=True)
+    address = models.TextField(blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    email = models.EmailField(blank=True)
+    
+    body = StreamField([
+        ('image_text', ImageTextBlock()),
+        ('cta', CTABlock()),
+    ], use_json_field=True, blank=True)
+    
+    content_panels = Page.content_panels + [
+        FieldPanel('intro'),
+        MultiFieldPanel([
+            FieldPanel('address'),
+            FieldPanel('phone'),
+            FieldPanel('email'),
+        ], heading="Contact Details"),
+        FieldPanel('body'),
+    ]
+    
+    parent_page_types = ['home.HomePage']
+    
+    class Meta:
+        verbose_name = "Contact Page"
+
+
+class GenericPage(Page):
+    """Generic content page for any purpose"""
+    
+    body = StreamField([
+        ('hero', HeroBlock()),
+        ('image_text', ImageTextBlock()),
+        ('services', ServicesBlock()),
+        ('experience', ExperienceBlock()),
+        ('safety_certifications', SafetyCertificationsBlock()),
+        ('cta', CTABlock()),
+    ], use_json_field=True, blank=True)
+    
+    content_panels = Page.content_panels + [
+        FieldPanel('body'),
+    ]
+    
+    parent_page_types = ['home.HomePage']
+    
+    class Meta:
+        verbose_name = "Generic Page"
 
 
 @register_snippet

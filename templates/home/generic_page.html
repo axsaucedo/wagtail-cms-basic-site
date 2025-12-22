@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<section class="pt-32 pb-12 bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+    <div class="container mx-auto px-4 lg:px-8 text-center text-white">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">{{ page.title }}</h1>
+    </div>
+</section>
+
+{% if page.body %}
+    {% for block in page.body %}
+        {% include_block block %}
+    {% endfor %}
+{% else %}
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-4 lg:px-8 text-center">
+        <p class="text-gray-500">Add content through the Wagtail admin panel.</p>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
