@@ -1,6 +1,6 @@
-modules = ["nodejs-20", "web", "postgresql-16", "python-3.12"]
-run = "npm run dev"
-hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
+modules = ["web", "postgresql-16", "python-3.12"]
+run = "python manage.py runserver 0.0.0.0:5000"
+hidden = [".config", ".git"]
 
 [nix]
 channel = "stable-24_05"
@@ -16,8 +16,6 @@ PORT = "5000"
 deploymentTarget = "autoscale"
 run = ["python", "manage.py", "runserver", "0.0.0.0:5000"]
 build = ["python", "manage.py", "collectstatic", "--noinput"]
-
-[agent]
 expertMode = true
 
 [workflows]
