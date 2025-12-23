@@ -5,11 +5,11 @@ description = "FlyMex Aero - Luxury private jet charter website built with Djang
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "Django>=5.1,<6.0",
-    "wagtail>=6.4,<7.0",
-    "whitenoise>=6.8,<7.0",
-    "gunicorn>=23.0,<24.0",
-    "Pillow>=11.0,<12.0",
+    "Django>=6.0",
+    "wagtail>=7.0",
+    "whitenoise>=6.8",
+    "gunicorn>=23.0",
+    "Pillow>=11.0",
 ]
 
 [project.optional-dependencies]
