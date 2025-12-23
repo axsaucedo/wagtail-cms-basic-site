@@ -4,7 +4,7 @@ Django settings for flymex_site project.
 
 import os
 from pathlib import Path
-import dj_database_url
+from urllib.parse import urlparse
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,9 +18,7 @@ INSTALLED_APPS = [
     'home',
     'fleet',
     'booking',
-    
-    'django.contrib.postgres',
-    
+
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -32,10 +30,10 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.admin',
     'wagtail',
-    
+
     'modelcluster',
     'taggit',
-    
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -77,8 +75,16 @@ WSGI_APPLICATION = 'flymex_site.wsgi.application'
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
+    db_url = urlparse(DATABASE_URL)
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL)
+        'default': {
+            'ENGINE': f'django.db.backends.{db_url.scheme}',
+            'NAME': db_url.path.lstrip('/'),
+            'USER': db_url.username or '',
+            'PASSWORD': db_url.password or '',
+            'HOST': db_url.hostname or '',
+            'PORT': db_url.port or '',
+        }
     }
 else:
     DATABASES = {
